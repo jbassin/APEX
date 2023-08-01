@@ -504,9 +504,10 @@ export default function Index() {
               abilities. Each character starts with one pip in every skill, and
               18 free pips can be assigned to any ability. The maximum number of
               pips set to any one ability equals two plus the associated
-              approach's number of pips. Finally, select a specialty. Every PC
-              has one ability they're particularly good at. Add one pip onto any
-              skill--this pip ignores the maximum limit from the previous step.
+              approach{"'"}s number of pips. Finally, select a specialty. Every
+              PC has one ability they{"'"}re particularly good at. Add one pip
+              onto any skill--this pip ignores the maximum limit from the
+              previous step.
             </p>
             <br />
             <p>
@@ -526,9 +527,9 @@ export default function Index() {
               Below is an interactive menu to assist in the construction of a
               proper ability array. Begin by dragging the three collections of
               pips into the approach you wish to assign them to. Then toggle the
-              pips in the ability cards until you've distributed all your
+              pips in the ability cards until you{"'"}ve distributed all your
               points. Finally, select the leftmost pip in the ability you wish
-              to be your PC's specialty.
+              to be your PC{"'"}s specialty.
             </p>
           </p>
         </div>
