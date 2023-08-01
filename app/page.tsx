@@ -490,6 +490,48 @@ export default function Index() {
             </p>
           </p>
         </div>
+        <div className="flex flex-row gap-4 text-neutral-content py-8">
+          <div className="basis-1/6" />
+          <p className="mb-5 basis-1/2">
+            <p className="text-4xl mb-2">Creating a Player Character</p>
+            <p>
+              There are three steps in creating a player character in APEX:
+              distributing your aptitudes, assigning pips to abilities, and
+              selecting a specialty. First is distributing aptitudes--every
+              player character is excellent at one approach, good at a second
+              approach, and okay at the third approach. Assign three pips to
+              one, two to another, and one to a third. Next is assigning pips to
+              abilities. Each character starts with one pip in every skill, and
+              18 free pips can be assigned to any ability. The maximum number of
+              pips set to any one ability equals two plus the associated
+              approach's number of pips. Finally, select a specialty. Every PC
+              has one ability they're particularly good at. Add one pip onto any
+              skill--this pip ignores the maximum limit from the previous step.
+            </p>
+            <br />
+            <p>
+              For example, Caregiver is building their character to be wise and
+              magically powerful but not particularly physical. She assigns
+              three pips to psyche, two to potency, and one to physicality.
+              Since that makes psyche-associated abilities have a max of five
+              pips, she puts five in composure and rhetoric and three in wit.
+              Physicality-associated abilities have a maximum of three pips, so
+              she arranges two in each. Potency-associated abilities have a max
+              of four pips; she puts three in shivers and volition and two in
+              interfacing. Finally, she selects composure as her specialty,
+              bringing the pip total to six for that ability.
+            </p>
+            <br />
+            <p>
+              Below is an interactive menu to assist in the construction of a
+              proper ability array. Begin by dragging the three collections of
+              pips into the approach you wish to assign them to. Then toggle the
+              pips in the ability cards until you've distributed all your
+              points. Finally, select the leftmost pip in the ability you wish
+              to be your PC's specialty.
+            </p>
+          </p>
+        </div>
       </div>
       <DndContext onDragEnd={handleDragEnd}>
         <div className="flex flex-row gap-4 my-4 alert">
