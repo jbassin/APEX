@@ -1,113 +1,660 @@
-import Image from 'next/image'
+"use client";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+import { useImmer } from "use-immer";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import Draggable from "./draggable";
+import Droppable from "./droppable";
+import { useMemo, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import Power from "./power";
+
+/* Aptitude: How good you are at a certain Approach
+ * Approach: One of Psyche, Physicality, and Potency
+ * Ability: One of the approach subdivisions
+ */
+
+type Aptitude = {
+  owner: string;
+  element: JSX.Element;
+};
+
+type Aptitudes = {
+  mild: Aptitude;
+  moderate: Aptitude;
+  major: Aptitude;
+};
+
+type Ability =
+  | "Composure"
+  | "Rhetoric"
+  | "Wit"
+  | "Endurance"
+  | "Agility"
+  | "Power"
+  | "Shivers"
+  | "Interfacing"
+  | "Volition";
+
+function abilityDescription(ability: Ability) {
+  switch (ability) {
+    case "Composure":
+      return "Stay calm under adversity. Withstand other wills.";
+    case "Rhetoric":
+      return "Convince those around you. Tempt the unwilling.";
+    case "Wit":
+      return "Uncover new knowledge. Remember hidden truths.";
+    case "Endurance":
+      return "Withstand great pressure. Struggle against the impossible.";
+    case "Agility":
+      return "React to new circumstances. Move with haste.";
+    case "Power":
+      return "Shift people and worlds. Apply intense force.";
+    case "Shivers":
+      return "Tune in to the Aether. Feel the world around you.";
+    case "Volition":
+      return "Manifest your will. Create something from nothing.";
+    case "Interfacing":
+      return "Manipulate complex systems. Speak with machines.";
+  }
+}
+
+type Style = {
+  background: string;
+  text: string;
+  border: string;
+  radio: string;
+  radioChecked: string;
+};
+
+type Approach = {
+  name: string;
+  flavor: string;
+  aptitude: string;
+  abilities: Ability[];
+  style: Style;
+};
+
+type Approaches = {
+  psyche: Approach;
+  physicality: Approach;
+  potency: Approach;
+};
+
+export default function Index() {
+  const [aptitudes, setAptitudes] = useImmer<Aptitudes>({
+    mild: {
+      owner: "none",
+      element: (
+        <Draggable id="mild">
+          <div className="alert flex gap-1 border-2 border-neutral-content">
+            <input
+              type="radio"
+              name="mild-1"
+              className="radio mx-1"
+              readOnly
+              checked
             />
-          </a>
+          </div>
+        </Draggable>
+      ),
+    },
+    moderate: {
+      owner: "none",
+      element: (
+        <Draggable id="moderate">
+          <div className="alert flex gap-1 border-2 border-neutral-content">
+            <input
+              type="radio"
+              name="moderate-1"
+              className="radio mx-1"
+              readOnly
+              checked
+            />
+            <input
+              type="radio"
+              name="moderate-2"
+              className="radio mx-1"
+              readOnly
+              checked
+            />
+          </div>
+        </Draggable>
+      ),
+    },
+    major: {
+      owner: "none",
+      element: (
+        <Draggable id="major">
+          <div className="alert flex gap-1 border-2 border-neutral-content">
+            <input
+              type="radio"
+              name="major-1"
+              className="radio mx-1"
+              readOnly
+              checked
+            />
+            <input
+              type="radio"
+              name="major-2"
+              className="radio mx-1"
+              readOnly
+              checked
+            />
+            <input
+              type="radio"
+              name="major-3"
+              className="radio mx-1"
+              readOnly
+              checked
+            />
+          </div>
+        </Draggable>
+      ),
+    },
+  });
+  const [power, setPower] = useState(18);
+
+  const approaches = useMemo<Approaches>(() => {
+    const init = {
+      psyche: {
+        name: "Psyche",
+        flavor: "Use your mind. Approach problems with forethought.",
+        aptitude: "none",
+        abilities: ["Composure", "Rhetoric", "Wit"] as Ability[],
+        style: {
+          background: "bg-primary",
+          text: "text-primary-content",
+          border: "border-primary",
+          radio: "radio-primary",
+          radioChecked: "checked:radio-primary",
+        },
+      },
+      physicality: {
+        name: "Physicality",
+        flavor: "Use your body. Approach problems with tactility.",
+        aptitude: "none",
+        abilities: ["Endurance", "Agility", "Power"] as Ability[],
+        style: {
+          background: "bg-secondary",
+          text: "text-secondary-content",
+          border: "border-secondary",
+          radio: "radio-secondary",
+          radioChecked: "checked:radio-secondary",
+        },
+      },
+      potency: {
+        name: "Potency",
+        flavor: "Use your soul. Approach problems with spirit.",
+        aptitude: "none",
+        abilities: ["Shivers", "Volition", "Interfacing"] as Ability[],
+        style: {
+          background: "bg-accent",
+          text: "text-accent-content",
+          border: "border-accent",
+          radio: "radio-accent",
+          radioChecked: "checked:radio-accent",
+        },
+      },
+    };
+
+    let owner: keyof Approaches;
+    for (owner in init) {
+      let aptitude: keyof Aptitudes;
+      for (aptitude in aptitudes) {
+        if (aptitudes[aptitude].owner === owner) {
+          init[owner].aptitude = aptitude;
+        }
+      }
+    }
+
+    return init;
+  }, [aptitudes]);
+
+  return (
+    <>
+      <div
+        className="hero min-h-screen"
+        style={{
+          backgroundImage: "url(https://i.imgur.com/tDNTT7D.jpeg)",
+        }}
+      >
+        <div className="hero-overlay bg-opacity-60"></div>
+        <div className="hero-content text-center text-neutral-content">
+          <div className="max-w-md">
+            <h1 className="mb-5 text-7xl font-bold">APEX</h1>
+            <p className="mb-5 italic">
+              The Aether responds to your touch, flowing up your limbs in a
+              strange, winding motion. Iridescent sparks jump between your
+              fingers, and you find that controlling their movement is as simple
+              as willing it. The power is intuitive and intoxicating, and the
+              well you pull from feels limitless. You direct your energy to the
+              star before you with a small gesture—a sea of liquid sunlight, the
+              star parts, expelling its ambrosial power in one great wave. A
+              billion voices cry out, then become fuel.
+            </p>
+          </div>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className="flex flex-col min-h-screen my-4">
+        <div className="flex flex-row gap-4 text-neutral-content py-8">
+          <div className="basis-1/3" />
+          <p className="mb-5 basis-1/2">
+            APEX is a tabletop roleplaying game about the Thessians, a race of
+            eldritch beings. As Thessians, the players fight and scheme to bring
+            about their world-spanning plans, whether this involves conquering
+            the universe, building a utopia, or simply exploring the reaches of
+            the unknown. This ruleset encourages narrative-heavy, one-shot style
+            play. You{"'"}ll need ten ten-sided dice (10d10), a completed
+            character sheet, and somewhere to track your character{"'"}s
+            resources to participate.
+          </p>
+        </div>
+        <div className="flex flex-row gap-4 text-neutral-content py-8">
+          <div className="basis-1/6" />
+          <p className="mb-5 basis-1/2">
+            <p className="text-5xl mb-2">Playing the Game</p>
+            <p>
+              A game of APEX involves <span className="font-bold">players</span>
+              , who control <span className="font-bold">player characters</span>{" "}
+              (<span className="font-bold">PCs</span>), and a{" "}
+              <span className="font-bold">narrator</span> who controls all other
+              characters (<span className="font-bold">NPCs</span>) and sets the
+              scene during play. Typical play cedes decision-making to the
+              players, who determine their PC
+              {"'"}s actions and what activities to pursue. Given the
+              overwhelming power of the PCs in this game, most actions require
+              no adjudication on the narrator
+              {"'"}s part and occur without any dice rolls. For instance, should
+              a player want to do something unlikely to fail--ranging anywhere
+              from throwing a rock a few hundred yards to flying, changing their
+              form, or consuming mundane poison--the narrator will give the
+              player the go-ahead to describe the action (or describe it
+              themselves, if the player prefers).
+            </p>
+            <br />
+            <p>
+              Dice rolls, and APEX{"'"}s{" "}
+              <span className="font-bold">dice pool</span> mechanic, only come
+              into play when a PC attempts an action that has a chance to fail.
+              This may include challenging tasks or actions that another
+              character may contest. To resolve such occurrences, every PC has
+              nine <span className="font-bold">abilities</span> that cover
+              different kinds of actions and three{" "}
+              <span className="font-bold">approaches</span> associated with
+              those abilities.
+            </p>
+          </p>
+        </div>
+        <div className="flex flex-row gap-4 text-neutral-content py-8">
+          <div className="basis-1/3" />
+          <p className="mb-5 basis-1/2">
+            <p className="text-4xl mb-2">Approaches and Abilities</p>
+            <p>
+              An approach is how a PC attempts to perform some action. APEX
+              categorizes approaches into three general categories:{" "}
+              <span className="text-primary-focus">psyche</span>,{" "}
+              <span className="text-secondary-focus">physicality</span>, and{" "}
+              <span className="text-accent-focus">potency</span>. A{" "}
+              <span className="text-primary-focus">psyche</span> approach means
+              a PC emphasizes using their mind and forethought, a{" "}
+              <span className="text-secondary-focus">physicality</span> approach
+              means the PC relies more on their physical body, and a{" "}
+              <span className="text-accent-focus">potency</span> approach means
+              the PC uses their magic more directly. As an example:{" "}
+              <span className="italic">Tracker</span> wants to locate a runaway
+              thrall. If <span className="italic">Tracker</span> hid a trace on
+              the thrall before it escaped, she{"'"}d use a{" "}
+              <span className="text-accent-focus">potency</span> approach. If{" "}
+              <span className="italic">Tracker</span> went looking for
+              footprints or broken branches, she
+              {"'"}d use a{" "}
+              <span className="text-secondary-focus">physicality</span>{" "}
+              approach. If <span className="italic">Tracker</span> imagined how
+              the thrall might act and attempted to predict its movements, she
+              {"'"}d use a <span className="text-primary-focus">psyche</span>{" "}
+              approach.
+            </p>
+            <br />
+            <p>
+              The nine abilities are the broad categories a particular action
+              can fall into and are used to describe the skill a PC has in that
+              kind of action. Abilities are associated with a specific approach
+              in groupings of three per approach.
+            </p>
+          </p>
+        </div>
+        <div className="flex flex-row gap-4 text-neutral-content py-8">
+          <div className="basis-1/6" />
+          <p className="mb-5 basis-1/2">
+            <p className="text-2xl mb-2 text-primary-focus">Psyche Abilities</p>
+            <p>
+              Composure.{" "}
+              <span className="italic">
+                Stay calm under adversity. Withstand other wills.
+              </span>{" "}
+              A PC
+              {"'"}s composure is its ability to shrug off attempts to control
+              or influence its actions and how well it can convincingly
+              misdirect others. Some examples that use the composure ability are
+              avoiding being stunned by an EMP and convincing an inquisitor of
+              your innocence.
+            </p>
+            <br />
+            <p>
+              Rhetoric.{" "}
+              <span className="italic">
+                Convince those around you. Tempt the unwilling.
+              </span>{" "}
+              A PC
+              {"'"}s rhetoric is its ability to manipulate others and persuade
+              them into actions in the PC{"'"}s favor. Some examples that use
+              the rhetoric ability are tricking a noble into exposing his
+              secrets in a high court and luring the son of the technocrat into
+              hedonic life of sin.
+            </p>
+            <br />
+            <p>
+              Wit.{" "}
+              <span className="italic">
+                Uncover new knowledge. Remember hidden truths.
+              </span>{" "}
+              A PC{"'"}s wit is its ability to recall and learn information.
+              Some examples that use the wit ability are learning the true name
+              of a formless anomaly on the rim, distributing esoteric truths to
+              mortals in exchange for favors, and remembering the correct lever
+              sequence to launch a slipship.
+            </p>
+          </p>
+        </div>
+        <div className="flex flex-row gap-4 text-neutral-content py-8">
+          <div className="basis-1/3" />
+          <p className="mb-5 basis-1/2">
+            <p className="text-2xl mb-2 text-secondary-focus">
+              Physicality Abilities
+            </p>
+            <p>
+              Endurance.{" "}
+              <span className="italic">
+                Withstand great pressure. Struggle against the impossible.
+              </span>{" "}
+              A PC{"'"}s endurance is its ability to push through hostile
+              environments, shrug off poisoning attempts, and exert itself over
+              long periods. Some examples that use the endurance ability are
+              descending into the heart of a singularity and holding a continent
+              above the ocean for millennia.
+            </p>
+            <br />
+            <p>
+              Agility.{" "}
+              <span className="italic">
+                React to new circumstances. Move with haste.
+              </span>{" "}
+              A PC{"'"}s agility is its ability to move with speed and grace.
+              Some examples that use the agility ability are slicing a paladin
+              in half before he can draw his blade and piloting an imperial
+              starcraft through a dense asteroid field.
+            </p>
+            <br />
+            <p>
+              Power.{" "}
+              <span className="italic">
+                Shift people and worlds. Apply intense force.
+              </span>{" "}
+              A PC{"'"}s power is its ability to exert pressure on objects or
+              command fear and respect among its followers. Some examples that
+              use the power ability are shattering an ancient {'"'}unbreakable
+              {'"'}
+              artifact and swinging a lightblade through a large moon.
+            </p>
+          </p>
+        </div>
+        <div className="flex flex-row gap-4 text-neutral-content py-8">
+          <div className="basis-1/6" />
+          <p className="mb-5 basis-1/2">
+            <p className="text-2xl mb-2 text-accent-focus">Potency Abilities</p>
+            <p>
+              Shivers.{" "}
+              <span className="italic">
+                Tune in to the Aether. Feel the world around you.
+              </span>{" "}
+              A PC{"'"}s shivers is its ability to perceive the world around it
+              and the effect technology or magic has on reality. Some examples
+              that use the shivers ability are seeking the location of the last
+              rebels in their underground base and tracing the flow of mana in a
+              broken magicircuit.
+            </p>
+            <br />
+            <p>
+              Volition.{" "}
+              <span className="italic">
+                Manifest your will. Create something from nothing.
+              </span>{" "}
+              A PC{"'"}s volition is its ability to generate or destroy matter
+              and energy. Some examples that use the volition ability are
+              summoning a ball of fire in the middle of a priest{"'"}s
+              convocation and consuming the nuclear force in a burgeoning people
+              {"'"}s space station.
+            </p>
+            <br />
+            <p>
+              Interfacing.{" "}
+              <span className="italic">
+                Manipulate complex systems. Speak with machines.
+              </span>{" "}
+              A PC{"'"}s interfacing is its ability to connect with magical
+              mechanisms and intricate machines. Some examples that use the
+              interfacing ability are convincing an autonomous turret to fire on
+              its creator and modifying a clock tower to summon fiends when it
+              strikes midnight.
+            </p>
+          </p>
+        </div>
+        <div className="flex flex-row gap-4 text-neutral-content py-8">
+          <div className="basis-1/3" />
+          <p className="mb-5 basis-1/2">
+            <p className="text-4xl mb-2">Rolling and Resolving Actions</p>
+            <p>
+              Each approach has one to three pips (⦿) associated with it,
+              representing how good a PC is at a particular approach--with more
+              pips being better. Similarly, each ability has one to six pips.
+              When a PC attempts to perform an action that might fail (or
+              succeed with consequences), the narrator asks them to perform an
+              ability check. The narrator determines which approach and skill
+              best fit the attempted action and sets the check{"'"}s difficulty
+              from two to nine. The player rolls a quantity of d10s equal to the
+              approach{"'"}s pips plus the ability{"'"}s pips and counts the
+              number of successes: the dice that rolled a six or higher. The
+              action succeeds if the number of successes equals or exceeds the
+              difficulty. If the number of successes is greater than half the
+              difficulty, rounded down, the action partially succeeds or
+              succeeds with consequences. Otherwise, the action fails.
+            </p>
+            <br />
+            <p>
+              For example, Anger and Despair want to drive their captives to
+              jump into the spike pit in their cell. Despair shows the captives
+              scenes of their loved ones dying and their world melting in an
+              attempt to rob them of their will to live. The narrator asks
+              Despair to roll a Psyche(⦿⦿)+Rhetoric(⦿⦿⦿) roll and sets the
+              difficulty at three. Despair has five pips between her approach
+              and ability, so she rolls five dice. She gets two successes, which
+              doesn{"'"}t match the difficulty but passes the half mark; while
+              some of the captives do self-impale, the rest bolster themselves
+              against her words. Seeing this, Anger gets bored and teleports
+              into the chamber, trying to throw the prisoners in one by one. The
+              narrator asks Anger to roll a Physicality(⦿⦿⦿)+Power(⦿⦿⦿⦿⦿⦿) roll
+              and keeps the difficulty at 3. Anger rolls nine dice and gets six
+              successes. As such, he successfully throws the remaining captives
+              into the pit.
+            </p>
+          </p>
+        </div>
       </div>
+      <DndContext onDragEnd={handleDragEnd}>
+        <div className="flex flex-row gap-4 my-4 alert">
+          <div className="flex flex-row gap-4 my-4">
+            <div>
+              {Object.keys(aptitudes).filter(
+                (kind) => aptitudes[kind as keyof Aptitudes].owner === "none"
+              ).length === 0 ? (
+                <></>
+              ) : (
+                <span>
+                  Drag these pips to the<br></br>approaches outlined below.
+                </span>
+              )}
+            </div>
+            {Object.keys(aptitudes)
+              .filter(
+                (kind) => aptitudes[kind as keyof Aptitudes].owner === "none"
+              )
+              .map((kind) => (
+                <div className={`card z-40`} key={kind}>
+                  {aptitudes[kind as keyof Aptitudes].element}
+                </div>
+              ))}
+          </div>
+          <div className="grow" />
+          <div className="flex flex-col">
+            <>
+              <span
+                className={`countdown font-mono text-5xl ${
+                  power == 0 ? "text-success" : power < 0 ? "text-error" : ""
+                }`}
+              >
+                <span
+                  style={{ "--value": Math.abs(power) } as unknown as undefined}
+                ></span>
+              </span>
+              <span
+                className={
+                  power == 0 ? "text-success" : power < 0 ? "text-error" : ""
+                }
+              >
+                {power > 0
+                  ? "points remaining"
+                  : power == 0
+                  ? "all points spent"
+                  : "too many points!"}
+              </span>
+            </>
+          </div>
+        </div>
+        <div className="flex flex-col gap-4 place-content-center">
+          {Object.keys(approaches)
+            .map((key) => ({
+              key,
+              ...approaches[key as keyof Approaches],
+            }))
+            .map(({ key, name, flavor, aptitude, abilities, style }) => (
+              <div key={key} className="flex flex-row gap-4">
+                <Droppable id={key}>
+                  <div
+                    className={`card w-96 h-56 ${style.background} ${style.text}`}
+                  >
+                    <div className="card-body">
+                      <h2 className="card-title">{name}</h2>
+                      <div className="card-actions justify-center">
+                        <p>{flavor}</p>
+                        {Object.keys(aptitudes).filter(
+                          (kind) =>
+                            aptitudes[kind as keyof Aptitudes].owner === key
+                        ).length === 0 ? (
+                          <div className="alert flex gap-1 border-2 border-neutral-content">
+                            <input
+                              type="radio"
+                              name="placeholder-1"
+                              className="radio mx-1 p-1 invisible"
+                              readOnly
+                              checked
+                            />
+                            <input
+                              type="radio"
+                              name="placeholder-2"
+                              className="radio mx-1 invisible"
+                              readOnly
+                              checked
+                            />
+                            <input
+                              type="radio"
+                              name="placeholder-3"
+                              className="radio mx-1 invisible"
+                              readOnly
+                              checked
+                            />
+                          </div>
+                        ) : (
+                          Object.keys(aptitudes)
+                            .filter(
+                              (kind) =>
+                                aptitudes[kind as keyof Aptitudes].owner === key
+                            )
+                            .map((kind) => (
+                              <div key={kind} className="z-40">
+                                {aptitudes[kind as keyof Aptitudes].element}
+                              </div>
+                            ))
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Droppable>
+                {abilities.map((ability) => (
+                  <div
+                    key={ability}
+                    className={`card w-96 h-56 bg-base-100 border-2 ${style.border}`}
+                  >
+                    <div className="card-body">
+                      <h2 className="card-title flex flex-row">
+                        <span>{ability}</span>
+                        <div className="grow"></div>
+                        {/* <div className="card-actions justify-end">
+                          <button className="btn btn-circle btn-xs">
+                            <FontAwesomeIcon icon={faCircleInfo} />
+                          </button>
+                        </div> */}
+                      </h2>
+                      <p>{abilityDescription(ability)}</p>
+                      <div className="card-actions justify-center">
+                        <Power
+                          className={style.radio}
+                          checkedClassName={style.radioChecked}
+                          aptitude={aptitude}
+                          ability={ability}
+                          powerUpdate={(prev: number, next: number) => {
+                            setPower(power + prev - next);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+        </div>
+      </DndContext>
+    </>
+  );
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+  function handleDragEnd(dee: DragEndEvent) {
+    setAptitudes((draft) => {
+      const heldAptitude = draft[dee.active.id as keyof Aptitudes];
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+      if (dee.over === null) {
+        heldAptitude.owner = "none";
+        return;
+      }
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
+      const hoveredApproach = dee.over.id as string;
+      heldAptitude.owner = hoveredApproach;
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      const hoveredApproachAptitude =
+        approaches[hoveredApproach as keyof Approaches].aptitude;
+      if (hoveredApproachAptitude !== "none") {
+        draft[hoveredApproachAptitude as keyof Aptitudes].owner =
+          aptitudes[dee.active.id as keyof Aptitudes].owner;
+      }
+    });
+  }
 }
