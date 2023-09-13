@@ -5,7 +5,10 @@ import { useMemo, useState } from "react";
 import { useImmer } from "use-immer";
 import Draggable from "./draggable";
 import Droppable from "./droppable";
+import Left from "./left";
 import Power from "./power";
+import Right from "./right";
+import { B, Card, I, Ph, Po, Ps } from "./util";
 
 /* Aptitude: How good you are at a certain Approach
  * Approach: One of Psyche, Physicality, and Potency
@@ -86,11 +89,20 @@ const genSpan = (className: string) => {
     return elem;
 };
 
-const bold = genSpan("font-bold");
-const italic = genSpan("italic");
-const psyche = genSpan("text-primary-focus");
-const physicality = genSpan("text-secondary-focus");
-const potency = genSpan("text-accent-focus");
+const ps = <Ps>Psyche</Ps>;
+const composure = <Ps>Composure</Ps>;
+const rhetoric = <Ps>Rhetoric</Ps>;
+const wit = <Ps>Wit</Ps>;
+
+const ph = <Ph>Physicality</Ph>;
+const endurance = <Ph>Endurance</Ph>;
+const agility = <Ph>Agility</Ph>;
+const pwr = <Ph>Power</Ph>;
+
+const po = <Po>Potency</Po>;
+const shivers = <Po>Shivers</Po>;
+const volition = <Po>Volition</Po>;
+const interfacing = <Po>Interfacing</Po>;
 
 export default function Index() {
     const [aptitudes, setAptitudes] = useImmer<Aptitudes>({
@@ -250,9 +262,8 @@ export default function Index() {
                 </div>
             </div>
             <div className="flex flex-col min-h-screen my-4">
-                <div className="flex flex-row gap-4 text-neutral-content py-8">
-                    <div className="lg:basis-1/3" />
-                    <p className="mb-5 lg:basis-1/2">
+                <Right>
+                    <p>
                         APEX is a tabletop roleplaying game about the Thessians,
                         a race of eldritch beings. As Thessians, the players
                         fight and scheme to bring about their world-spanning
@@ -263,338 +274,274 @@ export default function Index() {
                         (10d10), a completed character sheet, and somewhere to
                         track your character's resources to participate.
                     </p>
-                </div>
-                <div className="flex flex-row gap-4 text-neutral-content py-8">
-                    <div className="lg:basis-1/6" />
-                    <div className="mb-5 lg:basis-1/2">
-                        <p className="text-5xl mb-2">Playing the Game</p>
+                </Right>
+                <Left>
+                    <p className="text-5xl mb-2">Playing the Game</p>
+                    <p>
+                        A game of APEX involves <B>players</B>, who control{" "}
+                        <B>player characters</B> (<I>PCs</I>), and a{" "}
+                        <B>narrator</B> who controls all other characters (
+                        <I>NPCs</I>) and sets the scene during play. Typical
+                        play cedes decision-making to the players, who determine
+                        their PC's actions and what activities to pursue. Given
+                        the overwhelming power of the PCs in this game, most
+                        actions require no adjudication on the narrator's part
+                        and occur without any dice rolls.
+                    </p>
+                    <br />
+                    <p>
+                        Should a player want to do something unlikely to
+                        fail—ranging anywhere from throwing a rock a few hundred
+                        yards to flying, changing their form, or consuming
+                        mundane poison—the narrator will give the player the
+                        go-ahead to describe the action (or describe it
+                        themselves, if the player prefers).
+                    </p>
+                    <br />
+                    <p>
+                        Dice rolls, and APEX's <B>dice pool</B> mechanic, only
+                        come into play when a PC attempts an action that has a
+                        chance to fail. This may include challenging tasks or
+                        actions that another character may contest. To resolve
+                        such occurrences, every PC has nine <B>abilities</B>{" "}
+                        that cover different kinds of actions and three{" "}
+                        <B>approaches</B> associated with those abilities.
+                    </p>
+                </Left>
+                <Right>
+                    <p className="text-4xl mb-2">Approaches and Abilities</p>
+                    <p>
+                        An approach is how a PC attempts to perform some action.
+                        APEX categorizes approaches into three general
+                        categories: {ps}, {ph}, and {po}. A {ps} approach means
+                        a PC emphasizes using their mind and forethought, a {ph}{" "}
+                        approach means the PC relies more on their physical
+                        body, and a {po} approach means the PC uses their magic
+                        more directly.
+                    </p>
+                    <br />
+                    <Card>
+                        As an example: <I>Tracker</I> wants to locate a runaway
+                        thrall. If <I>Tracker</I> hid a trace on the thrall
+                        before it escaped, she'd use a {po} approach. If{" "}
+                        <I>Tracker</I> went looking for footprints or broken
+                        branches, she 'd use a {ph} approach. If <I>Tracker</I>{" "}
+                        imagined how the thrall might act and attempted to
+                        predict its movements, she 'd use a {ps} approach.
+                    </Card>
+                    <br />
+                    <p>
+                        The nine abilities are the broad categories a particular
+                        action can fall into and are used to describe the skill
+                        a PC has in that kind of action. Abilities are
+                        associated with a specific approach in groupings of
+                        three per approach.
+                    </p>
+                </Right>
+                <Left>
+                    <p className="text-2xl mb-2">
+                        <Ps>Psyche Abilities</Ps>
+                    </p>
+                    <p>
+                        {composure}.{" "}
+                        <I>Stay calm under adversity. Withstand other wills.</I>{" "}
+                        A PC's {composure} is its ability to shrug off attempts
+                        to control or influence its actions and how well it can
+                        convincingly misdirect others. Some examples that use
+                        the {composure} ability are avoiding being stunned by an
+                        EMP and convincing an inquisitor of your innocence.
+                    </p>
+                    <br />
+                    <p>
+                        {rhetoric}.{" "}
+                        <I>Convince those around you. Tempt the unwilling.</I> A
+                        PC's {rhetoric} is its ability to manipulate others and
+                        persuade them into actions in the PC's favor. Some
+                        examples that use the {rhetoric} ability are tricking a
+                        noble into exposing his secrets in a high court and
+                        luring the son of the technocrat into hedonic life of
+                        sin.
+                    </p>
+                    <br />
+                    <p>
+                        {wit}.{" "}
+                        <I>Uncover new knowledge. Remember hidden truths.</I> A
+                        PC's {wit} is its ability to recall and learn
+                        information. Some examples that use the {wit} ability
+                        are learning the true name of a formless anomaly on the
+                        rim, distributing esoteric truths to mortals in exchange
+                        for favors, and remembering the correct lever sequence
+                        to launch a slipship.
+                    </p>
+                </Left>
+                <Right>
+                    <p className="text-2xl mb-2">
+                        <Ph>Physicality Abilities</Ph>
+                    </p>
+                    <p>
+                        {endurance}.{" "}
+                        <I>
+                            Withstand great pressure. Struggle against the
+                            impossible.
+                        </I>{" "}
+                        A PC's {endurance} is its ability to push through
+                        hostile environments, shrug off poisoning attempts, and
+                        exert itself over long periods. Some examples that use
+                        the {endurance} ability are descending into the heart of
+                        a singularity and holding a continent above the ocean
+                        for millennia.
+                    </p>
+                    <br />
+                    <p>
+                        {agility}.{" "}
+                        <I>React to new circumstances. Move with haste.</I>A
+                        PC's {agility} is its ability to move with speed and
+                        grace. Some examples that use the {agility} ability are
+                        slicing a paladin in half before he can draw his blade
+                        and piloting an imperial starcraft through a dense
+                        asteroid field.
+                    </p>
+                    <br />
+                    <p>
+                        {pwr}.{" "}
+                        <I>Shift people and worlds. Apply intense force.</I> A
+                        PC's {pwr} is its ability to exert pressure on objects
+                        or command fear and respect among its followers. Some
+                        examples that use the {pwr} ability are shattering an
+                        ancient "unbreakable" artifact and swinging a lightblade
+                        through a large moon.
+                    </p>
+                </Right>
+                <Left>
+                    <p className="text-2xl mb-2">
+                        <Po>Potency Abilities</Po>
+                    </p>
+                    <p>
+                        {shivers}.{" "}
+                        <I>Tune in to the Aether. Feel the world around you.</I>{" "}
+                        A PC's {shivers} is its ability to perceive the world
+                        around it and the effect technology or magic has on
+                        reality. Some examples that use the {shivers} ability
+                        are seeking the location of the last rebels in their
+                        underground base and tracing the flow of mana in a
+                        broken magicircuit.
+                    </p>
+                    <br />
+                    <p>
+                        {volition}.{" "}
+                        <I>
+                            Manifest your will. Create something from nothing.
+                        </I>{" "}
+                        A PC's {volition} is its ability to generate or destroy
+                        matter and energy. Some examples that use the {volition}{" "}
+                        ability are summoning a ball of fire in the middle of a
+                        priest's convocation and consuming the nuclear force in
+                        a burgeoning people 's space station.
+                    </p>
+                    <br />
+                    <p>
+                        {interfacing}.{" "}
+                        <I>Manipulate complex systems. Speak with machines.</I>{" "}
+                        A PC's {interfacing} is its ability to connect with
+                        magical mechanisms and intricate machines. Some examples
+                        that use the {interfacing} ability are convincing an
+                        autonomous turret to fire on its creator and modifying a
+                        clock tower to summon fiends when it strikes midnight.
+                    </p>
+                </Left>
+                <Right>
+                    <p className="text-4xl mb-2">
+                        Rolling and Resolving Actions
+                    </p>
+                    <p>
+                        Each approach has one to three pips (⦿) associated with
+                        it, representing how good a PC is at a particular
+                        approach--with more pips being better. Similarly, each
+                        ability has one to six pips. When a PC attempts to
+                        perform an action that might fail (or succeed with
+                        consequences), the narrator asks them to perform an
+                        ability check. The narrator determines which approach
+                        and skill best fit the attempted action and sets the
+                        check's difficulty from two to nine. The player rolls a
+                        quantity of d10s equal to the approach's pips plus the
+                        ability's pips and counts the number of successes: the
+                        dice that rolled a six or higher. The action succeeds if
+                        the number of successes equals or exceeds the
+                        difficulty. If the number of successes is greater than
+                        half the difficulty, rounded down, the action partially
+                        succeeds or succeeds with consequences. Otherwise, the
+                        action fails.
+                    </p>
+                    <br />
+                    <Card>
+                        For example, <I>Anger</I> and <I>Despair</I> want to
+                        drive their captives to jump into the spike pit in their
+                        cell. <I>Despair</I> shows the captives scenes of their
+                        loved ones dying and their world melting in an attempt
+                        to rob them of their will to live. The narrator asks{" "}
+                        <I>Despair</I> to roll a {ps}(<Ps>⦿⦿</Ps>)+
+                        {rhetoric}(<Ps>⦿⦿⦿</Ps>) roll and sets the difficulty at
+                        three. <I>Despair</I> has five pips between her approach
+                        and ability, so she rolls five dice. She gets two
+                        successes, which doesn't match the difficulty but passes
+                        the half mark; while some of the captives do
+                        self-impale, the rest bolster themselves against her
+                        words. Seeing this, <I>Anger</I> gets bored and
+                        teleports into the chamber, trying to throw the
+                        prisoners in one by one. The narrator asks <I>Anger</I>{" "}
+                        to roll a {ph}(<Ph>⦿⦿⦿</Ph>)+{pwr}(<Ph>⦿⦿⦿⦿⦿⦿</Ph>) roll
+                        and keeps the difficulty at 3. <I>Anger</I> rolls nine
+                        dice and gets six successes. As such, he successfully
+                        throws the remaining captives into the pit.
+                    </Card>
+                </Right>
+                <Left>
+                    <p className="text-4xl mb-2">Creating a Player Character</p>
+                    <p>
+                        There are three steps in creating a player character in
+                        APEX: distributing your aptitudes, assigning pips to
+                        abilities, and selecting a specialty. First is
+                        distributing aptitudes--every player character is
+                        excellent at one approach, good at a second approach,
+                        and okay at the third approach. Assign three pips to
+                        one, two to another, and one to a third. Next is
+                        assigning pips to abilities. Each character starts with
+                        one pip in every skill, and 18 free pips can be assigned
+                        to any ability. The maximum number of pips set to any
+                        one ability equals two plus the associated approach's
+                        number of pips. Finally, select a specialty. Every PC
+                        has one ability they're particularly good at. Add one
+                        pip onto any skill--this pip ignores the maximum limit
+                        from the previous step.
+                    </p>
+                    <br />
+                    <Card>
+                        For example, <I>Caregiver</I> is building their
+                        character to be wise and magically powerful but not
+                        particularly physical. She assigns three pips to {ps},
+                        two to potency, and one to {ph}. Since that makes {ps}{" "}
+                        associated abilities have a max of five pips, she puts
+                        five in {composure} and {rhetoric} and three in {wit}.{" "}
+                        {ph} associated abilities have a maximum of three pips,
+                        so she arranges two in each. {po} associated abilities
+                        have a max of four pips; she puts three in {shivers} and{" "}
+                        {volition} and two in {interfacing}. Finally, she
+                        selects {composure} as her specialty, bringing the pip
+                        total to six for that ability.
+                    </Card>
+                    <br />
+                    <div className="hidden lg:block">
                         <p>
-                            A game of APEX involves {bold("players")}, who
-                            control {bold("player characters")} ({bold("PCs")}),
-                            and a {bold("narrator")} who controls all other
-                            characters ({bold("NPCs")}) and sets the scene
-                            during play. Typical play cedes decision-making to
-                            the players, who determine their PC's actions and
-                            what activities to pursue. Given the overwhelming
-                            power of the PCs in this game, most actions require
-                            no adjudication on the narrator's part and occur
-                            without any dice rolls. For instance, should a
-                            player want to do something unlikely to
-                            fail--ranging anywhere from throwing a rock a few
-                            hundred yards to flying, changing their form, or
-                            consuming mundane poison--the narrator will give the
-                            player the go-ahead to describe the action (or
-                            describe it themselves, if the player prefers).
-                        </p>
-                        <br />
-                        <p>
-                            Dice rolls, and APEX's {bold("dice pool")} mechanic,
-                            only come into play when a PC attempts an action
-                            that has a chance to fail. This may include
-                            challenging tasks or actions that another character
-                            may contest. To resolve such occurrences, every PC
-                            has nine {bold("abilities")} that cover different
-                            kinds of actions and three {bold("approaches")}{" "}
-                            associated with those abilities.
+                            Below is an interactive menu to assist in the
+                            construction of a proper ability array. Begin by
+                            dragging the three collections of pips into the
+                            approach you wish to assign them to. Then toggle the
+                            pips in the ability cards until you've distributed
+                            all your points. Finally, select the leftmost pip in
+                            the ability you wish to be your PC's specialty.
                         </p>
                     </div>
-                </div>
-                <div className="flex flex-row gap-4 text-neutral-content py-8">
-                    <div className="lg:basis-1/3" />
-                    <div className="mb-5 lg:basis-1/2">
-                        <p className="text-4xl mb-2">
-                            Approaches and Abilities
-                        </p>
-                        <p>
-                            An approach is how a PC attempts to perform some
-                            action. APEX categorizes approaches into three
-                            general categories: {psyche("Psyche")},{" "}
-                            {physicality("Physicality")}, and{" "}
-                            {potency("Potency")}. A {psyche("Psyche")} approach
-                            means a PC emphasizes using their mind and
-                            forethought, a {physicality("Physicality")} approach
-                            means the PC relies more on their physical body, and
-                            a {potency("Potency")} approach means the PC uses
-                            their magic more directly. As an example:{" "}
-                            {italic("Tracker")} wants to locate a runaway
-                            thrall. If {italic("Tracker")} hid a trace on the
-                            thrall before it escaped, she'd use a{" "}
-                            {potency("Potency")} approach. If{" "}
-                            {italic("Tracker")} went looking for footprints or
-                            broken branches, she 'd use a{" "}
-                            {physicality("Physicality")} approach. If{" "}
-                            {italic("Tracker")} imagined how the thrall might
-                            act and attempted to predict its movements, she 'd
-                            use a {psyche("Psyche")} approach.
-                        </p>
-                        <br />
-                        <p>
-                            The nine abilities are the broad categories a
-                            particular action can fall into and are used to
-                            describe the skill a PC has in that kind of action.
-                            Abilities are associated with a specific approach in
-                            groupings of three per approach.
-                        </p>
-                    </div>
-                </div>
-                <div className="flex flex-row gap-4 text-neutral-content py-8">
-                    <div className="lg:basis-1/6" />
-                    <div className="mb-5 lg:basis-1/2">
-                        <p className="text-2xl mb-2 text-primary-focus">
-                            Psyche Abilities
-                        </p>
-                        <p>
-                            {psyche("Composure")}.{" "}
-                            {italic(
-                                "Stay calm under adversity. Withstand other wills."
-                            )}{" "}
-                            A PC's {psyche("Composure")} is its ability to shrug
-                            off attempts to control or influence its actions and
-                            how well it can convincingly misdirect others. Some
-                            examples that use the {psyche("Composure")} ability
-                            are avoiding being stunned by an EMP and convincing
-                            an inquisitor of your innocence.
-                        </p>
-                        <br />
-                        <p>
-                            {psyche("Rhetoric")}.{" "}
-                            {italic(
-                                "Convince those around you. Tempt the unwilling."
-                            )}{" "}
-                            A PC's {psyche("Rhetoric")} is its ability to
-                            manipulate others and persuade them into actions in
-                            the PC's favor. Some examples that use the{" "}
-                            {psyche("Rhetoric")} ability are tricking a noble
-                            into exposing his secrets in a high court and luring
-                            the son of the technocrat into hedonic life of sin.
-                        </p>
-                        <br />
-                        <p>
-                            {psyche("Wit")}.{" "}
-                            {italic(
-                                "Uncover new knowledge. Remember hidden truths."
-                            )}{" "}
-                            A PC's {psyche("Wit")} is its ability to recall and
-                            learn information. Some examples that use the{" "}
-                            {psyche("Wit")} ability are learning the true name
-                            of a formless anomaly on the rim, distributing
-                            esoteric truths to mortals in exchange for favors,
-                            and remembering the correct lever sequence to launch
-                            a slipship.
-                        </p>
-                    </div>
-                </div>
-                <div className="flex flex-row gap-4 text-neutral-content py-8">
-                    <div className="lg:basis-1/3" />
-                    <div className="mb-5 lg:basis-1/2">
-                        <p className="text-2xl mb-2 text-secondary-focus">
-                            Physicality Abilities
-                        </p>
-                        <p>
-                            {physicality("Endurance")}.{" "}
-                            {italic(
-                                "Withstand great pressure. Struggle against the impossible."
-                            )}{" "}
-                            A PC's {physicality("Endurance")} is its ability to
-                            push through hostile environments, shrug off
-                            poisoning attempts, and exert itself over long
-                            periods. Some examples that use the{" "}
-                            {physicality("Endurance")} ability are descending
-                            into the heart of a singularity and holding a
-                            continent above the ocean for millennia.
-                        </p>
-                        <br />
-                        <p>
-                            {physicality("Agility")}.{" "}
-                            {italic(
-                                "React to new circumstances. Move with haste."
-                            )}{" "}
-                            A PC's {physicality("Agility")} is its ability to
-                            move with speed and grace. Some examples that use
-                            the {physicality("Agility")} ability are slicing a
-                            paladin in half before he can draw his blade and
-                            piloting an imperial starcraft through a dense
-                            asteroid field.
-                        </p>
-                        <br />
-                        <p>
-                            {physicality("Power")}.{" "}
-                            {italic(
-                                "Shift people and worlds. Apply intense force."
-                            )}{" "}
-                            A PC's {physicality("Power")} is its ability to
-                            exert pressure on objects or command fear and
-                            respect among its followers. Some examples that use
-                            the {physicality("Power")} ability are shattering an
-                            ancient "unbreakable" artifact and swinging a
-                            lightblade through a large moon.
-                        </p>
-                    </div>
-                </div>
-                <div className="flex flex-row gap-4 text-neutral-content py-8">
-                    <div className="lg:basis-1/6" />
-                    <div className="mb-5 lg:basis-1/2">
-                        <p className="text-2xl mb-2 text-accent-focus">
-                            Potency Abilities
-                        </p>
-                        <p>
-                            {potency("Shivers")}.{" "}
-                            {italic(
-                                "Tune in to the Aether. Feel the world around you."
-                            )}{" "}
-                            A PC's {potency("Shivers")} is its ability to
-                            perceive the world around it and the effect
-                            technology or magic has on reality. Some examples
-                            that use the {potency("Shivers")} ability are
-                            seeking the location of the last rebels in their
-                            underground base and tracing the flow of mana in a
-                            broken magicircuit.
-                        </p>
-                        <br />
-                        <p>
-                            {potency("Volition")}.{" "}
-                            {italic(
-                                "Manifest your will. Create something from nothing."
-                            )}{" "}
-                            A PC's {potency("Volition")} is its ability to
-                            generate or destroy matter and energy. Some examples
-                            that use the {potency("Volition")} ability are
-                            summoning a ball of fire in the middle of a priest's
-                            convocation and consuming the nuclear force in a
-                            burgeoning people 's space station.
-                        </p>
-                        <br />
-                        <p>
-                            {potency("Interfacing")}.{" "}
-                            {italic(
-                                "Manipulate complex systems. Speak with machines."
-                            )}{" "}
-                            A PC's {potency("Interfacing")} is its ability to
-                            connect with magical mechanisms and intricate
-                            machines. Some examples that use the{" "}
-                            {potency("Interfacing")} ability are convincing an
-                            autonomous turret to fire on its creator and
-                            modifying a clock tower to summon fiends when it
-                            strikes midnight.
-                        </p>
-                    </div>
-                </div>
-                <div className="flex flex-row gap-4 text-neutral-content py-8">
-                    <div className="lg:basis-1/3" />
-                    <div className="mb-5 lg:basis-1/2">
-                        <p className="text-4xl mb-2">
-                            Rolling and Resolving Actions
-                        </p>
-                        <p>
-                            Each approach has one to three pips (⦿) associated
-                            with it, representing how good a PC is at a
-                            particular approach--with more pips being better.
-                            Similarly, each ability has one to six pips. When a
-                            PC attempts to perform an action that might fail (or
-                            succeed with consequences), the narrator asks them
-                            to perform an ability check. The narrator determines
-                            which approach and skill best fit the attempted
-                            action and sets the check's difficulty from two to
-                            nine. The player rolls a quantity of d10s equal to
-                            the approach's pips plus the ability's pips and
-                            counts the number of successes: the dice that rolled
-                            a six or higher. The action succeeds if the number
-                            of successes equals or exceeds the difficulty. If
-                            the number of successes is greater than half the
-                            difficulty, rounded down, the action partially
-                            succeeds or succeeds with consequences. Otherwise,
-                            the action fails.
-                        </p>
-                        <br />
-                        <p>
-                            For example, {italic("Anger")} and{" "}
-                            {italic("Despair")} want to drive their captives to
-                            jump into the spike pit in their cell.{" "}
-                            {italic("Despair")} shows the captives scenes of
-                            their loved ones dying and their world melting in an
-                            attempt to rob them of their will to live. The
-                            narrator asks {italic("Despair")} to roll a{" "}
-                            {psyche("Psyche")}({psyche("⦿⦿")})+
-                            {psyche("Rhetoric")}({psyche("⦿⦿⦿")}) roll and sets
-                            the difficulty at three. {italic("Despair")} has
-                            five pips between her approach and ability, so she
-                            rolls five dice. She gets two successes, which
-                            doesn't match the difficulty but passes the half
-                            mark; while some of the captives do self-impale, the
-                            rest bolster themselves against her words. Seeing
-                            this, {italic("Anger")} gets bored and teleports
-                            into the chamber, trying to throw the prisoners in
-                            one by one. The narrator asks {italic("Anger")} to
-                            roll a {physicality("Physicality")}(
-                            {physicality("⦿⦿⦿")}
-                            )+
-                            {physicality("Power")}({physicality("⦿⦿⦿⦿⦿⦿")}) roll
-                            and keeps the difficulty at 3. {italic("Anger")}{" "}
-                            rolls nine dice and gets six successes. As such, he
-                            successfully throws the remaining captives into the
-                            pit.
-                        </p>
-                    </div>
-                </div>
-                <div className="flex flex-row gap-4 text-neutral-content py-8">
-                    <div className="lg:basis-1/6" />
-                    <div className="mb-5 lg:basis-1/2">
-                        <p className="text-4xl mb-2">
-                            Creating a Player Character
-                        </p>
-                        <p>
-                            There are three steps in creating a player character
-                            in APEX: distributing your aptitudes, assigning pips
-                            to abilities, and selecting a specialty. First is
-                            distributing aptitudes--every player character is
-                            excellent at one approach, good at a second
-                            approach, and okay at the third approach. Assign
-                            three pips to one, two to another, and one to a
-                            third. Next is assigning pips to abilities. Each
-                            character starts with one pip in every skill, and 18
-                            free pips can be assigned to any ability. The
-                            maximum number of pips set to any one ability equals
-                            two plus the associated approach's number of pips.
-                            Finally, select a specialty. Every PC has one
-                            ability they're particularly good at. Add one pip
-                            onto any skill--this pip ignores the maximum limit
-                            from the previous step.
-                        </p>
-                        <br />
-                        <p>
-                            For example, {italic("Caregiver")} is building their
-                            character to be wise and magically powerful but not
-                            particularly physical. She assigns three pips to{" "}
-                            {psyche("Psyche")}, two to potency, and one to{" "}
-                            {physicality("Physicality")}. Since that makes{" "}
-                            {psyche("Psyche")}-associated abilities have a max
-                            of five pips, she puts five in {psyche("Composure")}{" "}
-                            and {psyche("Rhetoric")} and three in{" "}
-                            {psyche("Wit")}. {physicality("Physicality")}
-                            -associated abilities have a maximum of three pips,
-                            so she arranges two in each. {potency("Potency")}
-                            -associated abilities have a max of four pips; she
-                            puts three in {potency("Shivers")} and{" "}
-                            {potency("Volition")} and two in{" "}
-                            {potency("Interfacing")}. Finally, she selects{" "}
-                            {psyche("Composure")} as her specialty, bringing the
-                            pip total to six for that ability.
-                        </p>
-                        <br />
-                        <div className="hidden lg:block">
-                            <p>
-                                Below is an interactive menu to assist in the
-                                construction of a proper ability array. Begin by
-                                dragging the three collections of pips into the
-                                approach you wish to assign them to. Then toggle
-                                the pips in the ability cards until you've
-                                distributed all your points. Finally, select the
-                                leftmost pip in the ability you wish to be your
-                                PC 's specialty.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                </Left>
             </div>
             <div className="hidden lg:block">
                 <DndContext onDragEnd={handleDragEnd}>
