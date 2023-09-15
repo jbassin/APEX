@@ -656,7 +656,7 @@ export default function Index() {
                             of the battle mechs near <I>Hunger</I> detonates its
                             energy core in a last-ditch effort to stop the
                             Thessian. <I>Hunger</I> takes <Ha>2 Harm</Ha> and
-                            fails a difficulty two {ph}(<Ph>⦿⦿⦿</Ph>
+                            fails a difficulty two {ph}(<Ph>⦿⦿</Ph>
                             )+{cmp}(<Ps>⦿</Ps>) check, losing an {ap} as a
                             result.
                         </p>
