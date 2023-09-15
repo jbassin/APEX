@@ -508,7 +508,7 @@ export default function Index() {
                         underlying Narrative. Powerful beings (such as the PCs)
                         must maintain a high local information density to
                         manifest and control their physical body. Every PC has
-                        eight <Hp>Health Points</Hp> ({hp}), representing the
+                        up to <Hp>10 Health Points</Hp> ({hp}), representing the
                         maximum information density a character can safely lose.
                         When a PC's {hp} is reduced to zero, the character loses{" "}
                         <Hp>coherence</Hp> and temporarily ceases to exist.
@@ -538,9 +538,9 @@ export default function Index() {
                         In addition to their {hp}, each Thessian has latent
                         energy that they can harness to increase their natural
                         ability. This energy is represented by{" "}
-                        <Ap>Action Points</Ap> ({ap}), and all PCs have a
-                        maximum of four. In a session of APEX, a player may
-                        spend their {ap} on one of two things: they may{" "}
+                        <Ap>Action Points</Ap> ({ap}), which a PC can have 2-10
+                        of. In a session of APEX, a player may spend their {ap}{" "}
+                        on one of two things: they may{" "}
                         <Ap>Push the Narrative</Ap>, or they may{" "}
                         <Ap>Activate a Power</Ap>.
                     </p>
@@ -656,8 +656,8 @@ export default function Index() {
                             of the battle mechs near <I>Hunger</I> detonates its
                             energy core in a last-ditch effort to stop the
                             Thessian. <I>Hunger</I> takes <Ha>2 Harm</Ha> and
-                            fails a difficulty two {ph}(<Ph>⦿⦿</Ph>
-                            )+{end}(<Ph>⦿⦿⦿⦿</Ph>) check, losing an {ap} as a
+                            fails a difficulty two {ph}(<Ph>⦿⦿⦿</Ph>
+                            )+{cmp}(<Ps>⦿</Ps>) check, losing an {ap} as a
                             result.
                         </p>
                     </Card>
@@ -673,7 +673,7 @@ export default function Index() {
                         character has in combat. Each Portfolio has a passive
                         power (which activates for free when certain conditions
                         are met), four active powers, a Coherence Loss event,
-                        and a selection of specializations.
+                        and a selection of 17 specializations.
                     </p>
                     <br />
                     <p>
@@ -688,13 +688,40 @@ export default function Index() {
                 <Right>
                     <H2>Building your Character</H2>
                     <p>
-                        There are three steps in creating a player character in
-                        APEX: distributing your aptitudes, assigning pips to
-                        abilities, and selecting a specialty. First is
-                        distributing aptitudes--every player character is
-                        excellent at one approach, good at a second approach,
-                        and okay at the third approach. Assign three pips to
-                        one, two to another, and one to a third. Next is
+                        To begin building your PC, you must start with a theme.
+                        All Thessians have a theme or ideal that they represent
+                        and inherit their name from. This can be a kind of
+                        creature (<I>Dragon</I>, <I>Beast</I>, or <I>Angel</I>),
+                        a concept (<I>Archival</I> or <I>Endless Night</I>), or
+                        an emotion (<I>Hunger</I>, <I>Vainglory</I>, and{" "}
+                        <I>Monotony</I>).
+                    </p>
+                    <br />
+                    <p>
+                        Once you have your theme, it's time to select your
+                        resources. You start with <Hp>2 HP</Hp> and{" "}
+                        <Ap>2 AP</Ap>, and have eight points to distribute
+                        between the two of them.
+                    </p>
+                    <br />
+                    <p>
+                        Next you select your Portfolio. Each Portfolio comes
+                        with a series of <Ap>Powers</Ap> and a selection of
+                        specializations. Select one, and four specializations
+                        from that Portfolio. If you choose any <Ap>Power</Ap>
+                        specializations, remember to choose which <Ap>
+                            Power
+                        </Ap>{" "}
+                        they apply to!
+                    </p>
+                    <br />
+                    <p>
+                        Finally, you make your ability scores: distribute your
+                        aptitudes, assign pips to abilities, and select a
+                        specialty. First is distributing aptitudes--every player
+                        character is excellent at one approach, good at a second
+                        approach, and okay at the third approach. Assign three
+                        pips to one, two to another, and one to a third. Next is
                         assigning pips to abilities. Each character starts with
                         one pip in every skill, and 18 free pips can be assigned
                         to any ability. The maximum number of pips set to any
@@ -706,29 +733,47 @@ export default function Index() {
                     </p>
                     <br />
                     <Card>
-                        For example, <I>Caregiver</I> is building their
-                        character to be wise and magically powerful but not
-                        particularly physical. She assigns three pips to {ps},
-                        two to potency, and one to {ph}. Since that makes {ps}{" "}
-                        associated abilities have a max of five pips, she puts
-                        five in {cmp} and {ret} and three in {wit}. {ph}{" "}
-                        associated abilities have a maximum of three pips, so
-                        she arranges two in each. {po} associated abilities have
-                        a max of four pips; she puts three in {shv} and {vol}{" "}
-                        and two in {int}. Finally, she selects {cmp} as her
-                        specialty, bringing the pip total to six for that
-                        ability.
+                        <p>
+                            For example: <I>Caregiver</I> likes to redeem her
+                            foes and take care of them even in their afterlife.
+                            She chooses a <Hp>8 HP</Hp>/<Ap>4 AP</Ap> split and
+                            the Grim Portfolio. She wants her thralls to be a
+                            little hardier, so she takes the Builder
+                            specialization. She wants to be able to command
+                            multiple thralls at a time, so she takes the
+                            Marionette specialization and applies it to her
+                            Puppet <Ap>Power</Ap>. She'd like to use Haunt
+                            often, so she takes the Efficient and Rallying Cry
+                            specializations as well, and applies both to Haunt.
+                        </p>
+                        <br />
+                        <p>
+                            For her ability array, she wants to be wise and
+                            magically powerful but not particularly physical.
+                            She assigns three pips to {ps}, two to {po}, and one
+                            to {ph}. Since that makes {ps} associated abilities
+                            have a max of five pips, she puts five in {cmp} and{" "}
+                            {ret} and three in {wit}. {ph} associated abilities
+                            have a maximum of three pips, so she arranges two in
+                            each. {po} associated abilities have a max of four
+                            pips; she puts three in {shv} and {vol} and two in{" "}
+                            {int}. Finally, she selects {cmp} as her specialty,
+                            bringing the pip total to six for that ability.
+                        </p>
                     </Card>
                     <br />
                     <div className="hidden lg:block">
                         <p>
                             Below is an interactive menu to assist in the
-                            construction of a proper ability array. Begin by
-                            dragging the three collections of pips into the
-                            approach you wish to assign them to. Then toggle the
-                            pips in the ability cards until you've distributed
-                            all your points. Finally, select the leftmost pip in
-                            the ability you wish to be your PC's specialty.
+                            construction of a PC. Start by using the slider to
+                            assign your resources. Select a Portfolio and toggle
+                            the specializations you'd like. Lastly, look at
+                            creating a proper ability array. Begin by dragging
+                            the three collections of pips into the approach you
+                            wish to assign them to. Then toggle the pips in the
+                            ability cards until you've distributed all your
+                            points. Finally, select the leftmost pip in the
+                            ability you wish to be your PC's specialty.
                         </p>
                     </div>
                 </Right>

@@ -1,7 +1,11 @@
 function makeSpan(classes: Array<string>) {
     return function Span(props: any) {
         return (
-            <span className={`${classes.join(" ")} ${props.className}`}>
+            <span
+                className={`${classes.join(" ")} ${
+                    !!props.className ? props.className : ""
+                }`}
+            >
                 {props.children}
             </span>
         );
@@ -11,7 +15,11 @@ function makeSpan(classes: Array<string>) {
 function makeP(classes: Array<string>) {
     return function P(props: any) {
         return (
-            <p className={`${classes.join(" ")} ${props.className}`}>
+            <p
+                className={`${classes.join(" ")} ${
+                    !!props.className ? props.className : ""
+                }`}
+            >
                 {props.children}
             </p>
         );
@@ -26,6 +34,17 @@ export const Po = makeSpan(["text-accent-focus"]);
 export const Hp = makeSpan(["text-success"]);
 export const Ap = makeSpan(["text-warning"]);
 export const Ha = makeSpan(["text-error"]);
+
+export function Re(props: any) {
+    return (
+        <span
+            className={`${!!props.className ? props.className : ""}`}
+            style={{ color: "rgb(235, 107, 71)" }}
+        >
+            {props.children}
+        </span>
+    );
+}
 
 export const H1 = makeP(["text-5xl", "mb-2"]);
 export const H2 = makeP(["text-4xl", "mb-2"]);
