@@ -244,7 +244,7 @@ export default function Index() {
       <div
         className="hero min-h-screen"
         style={{
-          backgroundImage: "url(https://i.imgur.com/tDNTT7D.jpeg)",
+          backgroundImage: "url(thessian.jpeg)",
         }}
       >
         <div className="hero-overlay"></div>
@@ -709,7 +709,9 @@ export default function Index() {
       </div>
       <div className="hidden lg:block">
         <Resources />
-        <Portfolios />
+      </div>
+      <Portfolios />
+      <div className="hidden lg:block">
         <DndContext onDragEnd={handleDragEnd}>
           <div className="flex flex-row gap-4 my-4 alert">
             <div className="flex flex-row gap-4 my-4">

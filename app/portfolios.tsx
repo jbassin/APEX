@@ -72,11 +72,11 @@ function Porfolio({
     <>
       <H1>{title}</H1>
       <br />
-      <div className="flex flex-col w-[50rem]">
+      <div className="flex flex-col w-full lg:w-[50rem]">
         <p>{description}</p>
       </div>
       <br />
-      <div className="flex flex-col w-[50rem]">
+      <div className="flex flex-col w-full lg:w-[50rem]">
         <H3>Passive Power</H3>
         <div className={`card w-full h-full bg-base-200 border-2`}>
           <div className="card-body">
@@ -89,9 +89,9 @@ function Porfolio({
         </div>
       </div>
       <br />
-      <div className="flex flex-col w-[50rem]">
+      <div className="flex flex-col w-full lg:w-[50rem]">
         <H3>Active Powers</H3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {active.map(({ name, text }) => (
             <div
               key={name}
@@ -109,7 +109,7 @@ function Porfolio({
         </div>
       </div>
       <br />
-      <div className="flex flex-col w-[50rem]">
+      <div className="flex flex-col w-full lg:w-[50rem]">
         <H3>Coherence Loss</H3>
         <div className={`card w-full h-full bg-base-200 border-2`}>
           <div className="card-body">
@@ -122,9 +122,9 @@ function Porfolio({
         </div>
       </div>
       <br />
-      <div className="flex flex-col w-[50rem]">
+      <div className="flex flex-col w-full lg:w-[50rem]">
         <H3>General Specializations</H3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {generalSpecialization.map(({ name, text }, i) => (
             <div
               key={`${name}/${i}`}
@@ -145,9 +145,9 @@ function Porfolio({
         </div>
       </div>
       <br />
-      <div className="flex flex-col w-[50rem]">
+      <div className="flex flex-col w-full lg:w-[50rem]">
         <H3>Power Specializations</H3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {powerSpecialization.map(({ name, text, target }, i) => (
             <div
               key={`${name}/${i + generalSpecialization.length}`}
@@ -1828,7 +1828,7 @@ export default function Portfolios() {
   return (
     <>
       <div className="flex flex-col gap-4 my-4 alert">
-        <div className="flex justify-center tabs">
+        <div className="hidden lg:flex justify-center tabs">
           {portfolios.map((p, i) => (
             <a
               key={i}
@@ -1837,6 +1837,19 @@ export default function Portfolios() {
             >
               {p.title}
             </a>
+          ))}
+        </div>
+        <div className="grid grid-cols-3 gap-2 lg:hidden justify-center">
+          {portfolios.map((p, i) => (
+            <div
+              key={i}
+              className={`w-full text-center badge badge-lg badge-outline ${
+                i == active ? "badge-success" : "badge-ghost"
+              }`}
+              onClick={() => setActive(i)}
+            >
+              {p.title}
+            </div>
           ))}
         </div>
         {portfolios.map((p, i) => (
