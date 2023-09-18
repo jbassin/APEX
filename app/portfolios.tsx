@@ -1,6 +1,7 @@
 import { produce } from "immer";
 import { Fragment, useCallback, useState } from "react";
 import { Ap, H1, H3, Ha, Hp, Ph, Po, Ps, Re } from "./util";
+import { unique } from "next/dist/build/utils";
 
 type Pair = {
   name: string;
@@ -14,7 +15,10 @@ type Portfolio = {
   passive: Pair;
   active: Pair[];
   coherenceLoss: Pair;
-  generalSpecialization: Pair[];
+  generalSpecialization: {
+    basic: Pair[];
+    unique: Pair[];
+  };
   powerSpecialization: Pair[];
 };
 
@@ -79,7 +83,7 @@ function Porfolio({
       <div className="flex flex-col w-full lg:w-[50rem]">
         <H3>Passive Power</H3>
         <div className={`card w-full h-full bg-base-200 border-2`}>
-          <div className="card-body">
+          <div className="card-body py-4">
             <h2 className="card-title flex flex-row">
               <span>{passive.name}</span>
               <div className="grow"></div>
@@ -97,7 +101,7 @@ function Porfolio({
               key={name}
               className={`card w-full h-full bg-base-200 border-2`}
             >
-              <div className="card-body">
+              <div className="card-body py-4">
                 <h2 className="card-title flex flex-row">
                   <span>{name}</span>
                   <div className="grow"></div>
@@ -112,7 +116,7 @@ function Porfolio({
       <div className="flex flex-col w-full lg:w-[50rem]">
         <H3>Coherence Loss</H3>
         <div className={`card w-full h-full bg-base-200 border-2`}>
-          <div className="card-body">
+          <div className="card-body py-4">
             <h2 className="card-title flex flex-row">
               <span>{coherenceLoss.name}</span>
               <div className="grow"></div>
@@ -124,16 +128,39 @@ function Porfolio({
       <br />
       <div className="flex flex-col w-full lg:w-[50rem]">
         <H3>General Specializations</H3>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {generalSpecialization.map(({ name, text }, i) => (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mb-4">
+          {generalSpecialization.basic.map(({ name, text }, i) => (
             <div
               key={`${name}/${i}`}
-              className={`card w-full h-full border-2 cursor-pointer ${
+              className={`card w-full h-full border-2 cursor-pointer select-none ${
                 isSelected(name, i) ? "bg-success-content" : "bg-base-200"
               }`}
               onClick={() => toggleSelected(name, i)}
             >
-              <div className="card-body">
+              <div className="card-body gap-0 py-2">
+                <div className="flex flex-row items-center">
+                  <h2 className="card-title justify-self-start">
+                    <span>{name}</span>
+                  </h2>
+                  <div className="grow"></div>
+                  <div className="justify-self-end text-right">
+                    <p>{text}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {generalSpecialization.unique.map(({ name, text }, i) => (
+            <div
+              key={`${name}/${i}`}
+              className={`card w-full h-full border-2 cursor-pointer select-none ${
+                isSelected(name, i) ? "bg-success-content" : "bg-base-200"
+              }`}
+              onClick={() => toggleSelected(name, i)}
+            >
+              <div className="card-body py-4">
                 <h2 className="card-title flex flex-row">
                   <span>{name}</span>
                   <div className="grow"></div>
@@ -150,17 +177,31 @@ function Porfolio({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {powerSpecialization.map(({ name, text, target }, i) => (
             <div
-              key={`${name}/${i + generalSpecialization.length}`}
+              key={`${name}/${
+                i +
+                generalSpecialization.basic.length +
+                generalSpecialization.unique.length
+              }`}
               className={`card w-full h-full border-2 cursor-pointer ${
-                isSelected(name, i + generalSpecialization.length)
+                isSelected(
+                  name,
+                  i +
+                    generalSpecialization.basic.length +
+                    generalSpecialization.unique.length
+                )
                   ? "bg-success-content"
                   : "bg-base-200"
               }`}
               onClick={() =>
-                toggleSelected(name, i + generalSpecialization.length)
+                toggleSelected(
+                  name,
+                  i +
+                    generalSpecialization.basic.length +
+                    generalSpecialization.unique.length
+                )
               }
             >
-              <div className="card-body">
+              <div className="card-body py-4">
                 <h2 className="card-title flex flex-row">
                   <span>{name}</span>
                   <div className="grow"></div>
@@ -168,7 +209,12 @@ function Porfolio({
                 <p>{text}</p>
                 <select
                   className={`select select-bordered w-full max-w-xs ${
-                    isSelected(name, i + generalSpecialization.length)
+                    isSelected(
+                      name,
+                      i +
+                        generalSpecialization.basic.length +
+                        generalSpecialization.unique.length
+                    )
                       ? "bg-base-200"
                       : "hidden"
                   }`}
@@ -221,6 +267,21 @@ function Porfolio({
     </>
   );
 }
+
+const wellspring: Pair = {
+  name: "Wellspring",
+  text: <Ap>+1 AP</Ap>,
+};
+
+const hardy: Pair = {
+  name: "Hardy",
+  text: <Hp>+1 HP</Hp>,
+};
+
+const mercury: Pair = {
+  name: "Mercury",
+  text: <span>You may move twice in a round.</span>,
+};
 
 const portfolios: Portfolio[] = [
   {
@@ -285,45 +346,33 @@ const portfolios: Portfolio[] = [
         </span>
       ),
     },
-    generalSpecialization: [
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Mercury",
-        text: "Move twice per turn.",
-      },
-      {
-        name: "Honed",
-        text: (
-          <span>
-            <Ha>+1 Harm</Ha> to Hazardous Aura.
-          </span>
-        ),
-      },
-      {
-        name: "Quick-Strike",
-        text: "Hazardous Aura can target two enemies.",
-      },
-      {
-        name: "Retaliate",
-        text: (
-          <span>
-            Hazardous Aura activates every time you take <Ha>Harm</Ha>, as well
-            as at the start of your turn.
-          </span>
-        ),
-      },
-    ],
+    generalSpecialization: {
+      basic: [wellspring, hardy, hardy],
+      unique: [
+        mercury,
+        {
+          name: "Honed",
+          text: (
+            <span>
+              <Ha>+1 Harm</Ha> to Hazardous Aura.
+            </span>
+          ),
+        },
+        {
+          name: "Quick-Strike",
+          text: "Hazardous Aura can target two enemies.",
+        },
+        {
+          name: "Retaliate",
+          text: (
+            <span>
+              Hazardous Aura activates every time you take <Ha>Harm</Ha>, as
+              well as at the start of your turn.
+            </span>
+          ),
+        },
+      ],
+    },
     powerSpecialization: [
       {
         name: "Finder",
@@ -451,45 +500,36 @@ const portfolios: Portfolio[] = [
         </span>
       ),
     },
-    generalSpecialization: [
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Burst",
-        text: (
-          <span>
-            You may have 1 drop each round explode, dealing {harm(2)} to all
-            Close enemies.
-          </span>
-        ),
-      },
-      {
-        name: "Enhanced Burn",
-        text: <span>You can use Controlled Burn twice per round.</span>,
-      },
-      {
-        name: "Adaptive",
-        text: (
-          <span>
-            Any drop you pick up can be treated as <Hp>HP</Hp> or <Ap>AP</Ap>.
-          </span>
-        ),
-      },
-      {
-        name: "Bountiful",
-        text: <span>Enemies you kill create 2 drops.</span>,
-      },
-    ],
+    generalSpecialization: {
+      basic: [wellspring, wellspring, hardy],
+      unique: [
+        {
+          name: "Burst",
+          text: (
+            <span>
+              You may have 1 drop each round explode, dealing {harm(2)} to all
+              Close enemies.
+            </span>
+          ),
+        },
+        {
+          name: "Enhanced Burn",
+          text: <span>You can use Controlled Burn twice per round.</span>,
+        },
+        {
+          name: "Adaptive",
+          text: (
+            <span>
+              Any drop you pick up can be treated as <Hp>HP</Hp> or <Ap>AP</Ap>.
+            </span>
+          ),
+        },
+        {
+          name: "Bountiful",
+          text: <span>Enemies you kill create 2 drops.</span>,
+        },
+      ],
+    },
     powerSpecialization: [
       {
         name: "Finder",
@@ -625,54 +665,45 @@ const portfolios: Portfolio[] = [
         </span>
       ),
     },
-    generalSpecialization: [
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Loom",
-        text: (
-          <span>
-            You may <Re>Mark</Re> any three enemies instead of two.
-          </span>
-        ),
-      },
-      {
-        name: "Severed",
-        text: (
-          <span>
-            <Re>Marked</Re> enemies deal <Ha>-1 Harm</Ha> to you.
-          </span>
-        ),
-      },
-      {
-        name: "Stun",
-        text: (
-          <span>
-            At the start of the round, choose 1 <Re>Marked</Re> enemy to not act
-            or move this round.
-          </span>
-        ),
-      },
-      {
-        name: "Razor Edge",
-        text: (
-          <span>
-            Your Sharp Edge targets all foes you have <Re>Marked</Re> as well as
-            the ones you select.
-          </span>
-        ),
-      },
-    ],
+    generalSpecialization: {
+      basic: [wellspring, hardy, hardy],
+      unique: [
+        {
+          name: "Loom",
+          text: (
+            <span>
+              You may <Re>Mark</Re> any three enemies instead of two.
+            </span>
+          ),
+        },
+        {
+          name: "Severed",
+          text: (
+            <span>
+              <Re>Marked</Re> enemies deal <Ha>-1 Harm</Ha> to you.
+            </span>
+          ),
+        },
+        {
+          name: "Stun",
+          text: (
+            <span>
+              At the start of the round, choose 1 <Re>Marked</Re> enemy to not
+              act or move this round.
+            </span>
+          ),
+        },
+        {
+          name: "Razor Edge",
+          text: (
+            <span>
+              Your Sharp Edge targets all foes you have <Re>Marked</Re> as well
+              as the ones you select.
+            </span>
+          ),
+        },
+      ],
+    },
     powerSpecialization: [
       {
         name: "Finder",
@@ -810,44 +841,35 @@ const portfolios: Portfolio[] = [
         </span>
       ),
     },
-    generalSpecialization: [
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Defiant",
-        text: (
-          <span>
-            Regain <Hp>1 HP</Hp> at the start of the round.
-          </span>
-        ),
-      },
-      {
-        name: "Shockwave",
-        text: <span>You may stun 2 enemies with Unstoppable.</span>,
-      },
-      {
-        name: "Overwhelming Presence",
-        text: (
-          <span>
-            If you don't Move, all Close enemies cannot act this round.
-          </span>
-        ),
-      },
-      {
-        name: "Ramming",
-        text: <span>Enemies hit by Unstoppable take {harm(2)}.</span>,
-      },
-    ],
+    generalSpecialization: {
+      basic: [wellspring, hardy, hardy],
+      unique: [
+        {
+          name: "Defiant",
+          text: (
+            <span>
+              Regain <Hp>1 HP</Hp> at the start of the round.
+            </span>
+          ),
+        },
+        {
+          name: "Shockwave",
+          text: <span>You may stun 2 enemies with Unstoppable.</span>,
+        },
+        {
+          name: "Overwhelming Presence",
+          text: (
+            <span>
+              If you don't Move, all Close enemies cannot act this round.
+            </span>
+          ),
+        },
+        {
+          name: "Ramming",
+          text: <span>Enemies hit by Unstoppable take {harm(2)}.</span>,
+        },
+      ],
+    },
     powerSpecialization: [
       {
         name: "Finder",
@@ -978,50 +1000,41 @@ const portfolios: Portfolio[] = [
         </span>
       ),
     },
-    generalSpecialization: [
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Deadly",
-        text: <span>Virulent deals {harm(2)}.</span>,
-      },
-      {
-        name: "Plague",
-        text: (
-          <span>
-            Virulent <Re>Infects</Re> 3 enemies.
-          </span>
-        ),
-      },
-      {
-        name: "Vector",
-        text: (
-          <span>
-            Once per round, <Re>Infect</Re> an enemy within Close range.
-          </span>
-        ),
-      },
-      {
-        name: "Evolved",
-        text: (
-          <span>
-            Choose one of the Symptomatic effects to permanently be in effect
-            for all <Re>Infected</Re>. This effect can no longer be chosen when
-            using Symptomatic.
-          </span>
-        ),
-      },
-    ],
+    generalSpecialization: {
+      basic: [wellspring, hardy, hardy],
+      unique: [
+        {
+          name: "Deadly",
+          text: <span>Virulent deals {harm(2)}.</span>,
+        },
+        {
+          name: "Plague",
+          text: (
+            <span>
+              Virulent <Re>Infects</Re> 3 enemies.
+            </span>
+          ),
+        },
+        {
+          name: "Vector",
+          text: (
+            <span>
+              Once per round, <Re>Infect</Re> an enemy within Close range.
+            </span>
+          ),
+        },
+        {
+          name: "Evolved",
+          text: (
+            <span>
+              Choose one of the Symptomatic effects to permanently be in effect
+              for all <Re>Infected</Re>. This effect can no longer be chosen
+              when using Symptomatic.
+            </span>
+          ),
+        },
+      ],
+    },
     powerSpecialization: [
       {
         name: "Finder",
@@ -1151,54 +1164,54 @@ const portfolios: Portfolio[] = [
         </span>
       ),
     },
-    generalSpecialization: [
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Builder",
-        text: <Re>+1 Thrall HP</Re>,
-      },
-      {
-        name: "Lent Sinew",
-        text: (
-          <span>
-            <Re>Thralls</Re> are revived with {po} <Hp>HP</Hp>, up to their max.
-          </span>
-        ),
-      },
-      {
-        name: "Enthralling",
-        text: (
-          <span>
-            Can make a <Re>Thrall</Re> anytime an enemy dies, not just once per
-            round.
-          </span>
-        ),
-      },
-      {
-        name: "Danse Macabre",
-        text: (
-          <span>
-            One <Re>Thrall</Re> can move during your turn.
-          </span>
-        ),
-      },
-      {
-        name: "Howlers",
-        text: (
-          <span>
-            Whenever a Thrall dies they activate the Haunt effect at their
-            location.
-          </span>
-        ),
-      },
-    ],
+    generalSpecialization: {
+      basic: [
+        wellspring,
+        hardy,
+        {
+          name: "Builder",
+          text: <Re>+1 Thrall HP</Re>,
+        },
+      ],
+      unique: [
+        {
+          name: "Lent Sinew",
+          text: (
+            <span>
+              <Re>Thralls</Re> are revived with {po} <Hp>HP</Hp>, up to their
+              max.
+            </span>
+          ),
+        },
+        {
+          name: "Enthralling",
+          text: (
+            <span>
+              Can make a <Re>Thrall</Re> anytime an enemy dies, not just once
+              per round.
+            </span>
+          ),
+        },
+        {
+          name: "Danse Macabre",
+          text: (
+            <span>
+              One <Re>Thrall</Re> can move during your turn.
+            </span>
+          ),
+        },
+        {
+          name: "Howlers",
+          text: (
+            <span>
+              Whenever a Thrall dies they activate the Haunt effect at their
+              location.
+            </span>
+          ),
+        },
+      ],
+    },
+
     powerSpecialization: [
       {
         name: "Finder",
@@ -1334,44 +1347,35 @@ const portfolios: Portfolio[] = [
         </span>
       ),
     },
-    generalSpecialization: [
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Smaller Tank",
-        text: (
-          <span>
-            Only gain <Ap>2 AP</Ap> from Inverted Fate.
-          </span>
-        ),
-      },
-      {
-        name: "Lifeblood",
-        text: (
-          <span>
-            You may treat <Ap>AP</Ap> drops as <Hp>HP</Hp> instead.
-          </span>
-        ),
-      },
-      {
-        name: "Mercury",
-        text: <span>May move twice per turn.</span>,
-      },
-      {
-        name: "Bullet Storm",
-        text: <span>Bullet Hell deals {harm(4)}.</span>,
-      },
-    ],
+    generalSpecialization: {
+      basic: [wellspring, hardy, hardy],
+      unique: [
+        {
+          name: "Smaller Tank",
+          text: (
+            <span>
+              Only gain <Ap>2 AP</Ap> from Inverted Fate.
+            </span>
+          ),
+        },
+        {
+          name: "Lifeblood",
+          text: (
+            <span>
+              You may treat <Ap>AP</Ap> drops as <Hp>HP</Hp> instead.
+            </span>
+          ),
+        },
+        {
+          name: "Mercury",
+          text: <span>May move twice per turn.</span>,
+        },
+        {
+          name: "Bullet Storm",
+          text: <span>Bullet Hell deals {harm(4)}.</span>,
+        },
+      ],
+    },
     powerSpecialization: [
       {
         name: "Boosted",
@@ -1524,49 +1528,40 @@ const portfolios: Portfolio[] = [
         </span>
       ),
     },
-    generalSpecialization: [
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Hearty",
-        text: (
-          <span>
-            Regain <Hp>2 HP</Hp> from <Hp>HP</Hp> drops.
-          </span>
-        ),
-      },
-      {
-        name: "Leech",
-        text: (
-          <span>
-            <Ap>AP</Ap> drops also provide <Hp>1 HP</Hp>.
-          </span>
-        ),
-      },
-      {
-        name: "Reborn",
-        text: (
-          <span>
-            Gain the <Re>Ambrosial effect</Re> from Ritual Sacrifice when
-            activating Axiom.
-          </span>
-        ),
-      },
-      {
-        name: "Mobile Grave",
-        text: <span>You may resurrect anywhere when activating Axiom.</span>,
-      },
-    ],
+    generalSpecialization: {
+      basic: [wellspring, hardy, hardy],
+      unique: [
+        {
+          name: "Hearty",
+          text: (
+            <span>
+              Regain <Hp>2 HP</Hp> from <Hp>HP</Hp> drops.
+            </span>
+          ),
+        },
+        {
+          name: "Leech",
+          text: (
+            <span>
+              <Ap>AP</Ap> drops also provide <Hp>1 HP</Hp>.
+            </span>
+          ),
+        },
+        {
+          name: "Reborn",
+          text: (
+            <span>
+              Gain the <Re>Ambrosial effect</Re> from Ritual Sacrifice when
+              activating Axiom.
+            </span>
+          ),
+        },
+        {
+          name: "Mobile Grave",
+          text: <span>You may resurrect anywhere when activating Axiom.</span>,
+        },
+      ],
+    },
     powerSpecialization: [
       {
         name: "Finder",
@@ -1708,49 +1703,55 @@ const portfolios: Portfolio[] = [
         </span>
       ),
     },
-    generalSpecialization: [
-      {
-        name: "Wellspring",
-        text: <Ap>+1 AP</Ap>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Hardy",
-        text: <Hp>+1 HP</Hp>,
-      },
-      {
-        name: "Eternal",
-        text: (
-          <span>
-            <Re>Damnation</Re> is not removed after enemies deal <Ha>Harm</Ha>.
-          </span>
-        ),
-      },
-      {
-        name: "Dance with the Devil",
-        text: (
-          <span>
-            <Re>Damned</Re> enemies take {harm(1)} whenever they are Close to
-            you.
-          </span>
-        ),
-      },
-      {
-        name: "Fine Print",
-        text: (
-          <span>
-            <Re>Damned</Re> enemies cannot <Ha>Harm</Ha> you.
-          </span>
-        ),
-      },
-      {
-        name: "For Whom the Bell Tolls",
-        text: <span>Enemies are effected by Judgement Day at any range.</span>,
-      },
-    ],
+    generalSpecialization: {
+      basic: [wellspring, hardy, hardy],
+      unique: [
+        {
+          name: "Wellspring",
+          text: <Ap>+1 AP</Ap>,
+        },
+        {
+          name: "Hardy",
+          text: <Hp>+1 HP</Hp>,
+        },
+        {
+          name: "Hardy",
+          text: <Hp>+1 HP</Hp>,
+        },
+        {
+          name: "Eternal",
+          text: (
+            <span>
+              <Re>Damnation</Re> is not removed after enemies deal <Ha>Harm</Ha>
+              .
+            </span>
+          ),
+        },
+        {
+          name: "Dance with the Devil",
+          text: (
+            <span>
+              <Re>Damned</Re> enemies take {harm(1)} whenever they are Close to
+              you.
+            </span>
+          ),
+        },
+        {
+          name: "Fine Print",
+          text: (
+            <span>
+              <Re>Damned</Re> enemies cannot <Ha>Harm</Ha> you.
+            </span>
+          ),
+        },
+        {
+          name: "For Whom the Bell Tolls",
+          text: (
+            <span>Enemies are effected by Judgement Day at any range.</span>
+          ),
+        },
+      ],
+    },
     powerSpecialization: [
       {
         name: "Finder",
