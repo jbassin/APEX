@@ -396,7 +396,8 @@ const portfolios: Portfolio[] = [
       text: (
         <span>
           You warp the resources of your enemies. Once per round, you can change
-          a drop from one type to the other (e.g. <Hp>HP</Hp> to <Ap>AP</Ap>).
+          a drop you or an ally pick up from one type to the other (e.g.{" "}
+          <Hp>HP</Hp> to <Ap>AP</Ap>).
         </span>
       ),
     },
@@ -477,7 +478,7 @@ const portfolios: Portfolio[] = [
         text: <span>You can use Controlled Burn twice per round.</span>,
       },
       {
-        name: "Adapative",
+        name: "Adaptive",
         text: (
           <span>
             Any drop you pick up can be treated as <Hp>HP</Hp> or <Ap>AP</Ap>.
